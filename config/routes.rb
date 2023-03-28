@@ -11,6 +11,10 @@ Rails.application.routes.draw do
     confirmations: "confirmations"
   }
 
+  # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
+  # Can be used by load balancers and uptime monitors to verify that the app is live.
+  get "/up" => "health#show"
+
   devise_scope :user do
     get "/enter", to: "registrations#new", as: :sign_up
     get "/confirm-email", to: "confirmations#new"
@@ -350,10 +354,6 @@ Rails.application.routes.draw do
     get "/:sitemap", to: "sitemaps#show",
                      constraints: { format: /xml/, sitemap: /sitemap-.+/ }
     get "/:username", to: "stories#index", as: "user_profile"
-
-    # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
-    # Can be used by load balancers and uptime monitors to verify that the app is live.
-    get "up" => "rails/health#show"
 
     root "stories#index"
   end
