@@ -2,8 +2,12 @@ name: Deploy with msrk
 
 on: pull_request
 
+
+
 jobs:
   deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
     steps:
     - name: Checkout repository
       uses: actions/checkout@v3
@@ -12,7 +16,9 @@ jobs:
       run: cp .env_sample .env
 
     - name: Set environment variables
-      uses: falnyr/replace-env-vars-action@v1.3.2
+      uses: cschleiden/replace-tokens@v1
+      with:
+        files: '[".env"]'
       env:
         DATABASE_NAME: ${{ secrets.DATABASE_NAME }}
         DATABASE_URL: ${{ secrets.DATABASE_URL }}
@@ -24,8 +30,13 @@ jobs:
         REDIS_RPUSH_URL: ${{ secrets.REDIS_RPUSH_URL }}
         SECRET_KEY_BASE: ${{ secrets.SECRET_KEY_BASE }}
         SESSION_KEY: ${{ secrets.SESSION_KEY }}
+  
+    - name: verify environment variables
+      run: cat .env
+
+    - uses: webfactory/ssh-agent@v0.7.0
       with:
-        filename: .env
+        ssh-private-key: ${{ secrets.SSH_DO_PRIVATE_KEY }}
 
     - name: Set up Ruby
       uses: ruby/setup-ruby@v1
@@ -34,4 +45,4 @@ jobs:
       run: gem install mrsk
 
     - name: Deploy branch
-      run: msrk deploy
+      run: mrsk deploy
