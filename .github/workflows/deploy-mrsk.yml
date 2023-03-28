@@ -12,27 +12,11 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v3
 
-    - name: Set up env file
-      run: cp .env_sample .env
-
     - name: Set environment variables
-      uses: cschleiden/replace-tokens@v1
-      with:
-        files: '[".env"]'
-      env:
-        DATABASE_NAME: ${{ secrets.DATABASE_NAME }}
-        DATABASE_URL: ${{ secrets.DATABASE_URL }}
-        FOREM_OWNER_SECRET: ${{ secrets.FOREM_OWNER_SECRET }}
-        MRSK_REGISTRY_PASSWORD: ${{ secrets.MRSK_REGISTRY_PASSWORD }}
-        REDIS_URL: ${{ secrets.REDIS_URL }}
-        REDIS_SESSIONS_URL: ${{ secrets.REDIS_SESSIONS_URL }}
-        REDIS_SIDEKIQ_URL: ${{ secrets.REDIS_SIDEKIQ_URL }}
-        REDIS_RPUSH_URL: ${{ secrets.REDIS_RPUSH_URL }}
-        SECRET_KEY_BASE: ${{ secrets.SECRET_KEY_BASE }}
-        SESSION_KEY: ${{ secrets.SESSION_KEY }}
-  
-    - name: verify environment variables
-      run: cat .env
+      run: |
+        echo "${{ secrets.PRODUCTION_ENV_FILE }}" > .env
+
+    - run: cat .env
 
     - uses: webfactory/ssh-agent@v0.7.0
       with:
