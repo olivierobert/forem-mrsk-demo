@@ -6,7 +6,7 @@ image: olivierobert/forem-mrsk-demo
 
 # Deploy to these servers.
 servers:
-  - 157.245.197.246
+  - 178.128.57.231
 
 # Credentials for your image host.
 registry:
