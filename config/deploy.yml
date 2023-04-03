@@ -19,7 +19,7 @@ registry:
 # Inject ENV variables into containers (secrets come from .env).
 env:
   clear:
-    APP_DOMAIN: "localhost:3000"
+    APP_DOMAIN: "178.128.57.231"
     APP_PROTOCOL: "http://"
     COMMUNITY_NAME: "Bangkok.rb Community"
     DEFAULT_EMAIL: "community@bangkorb.org"
